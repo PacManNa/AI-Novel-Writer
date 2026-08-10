@@ -56,4 +56,24 @@ export const legacyUk = {
   'Unable to open link': 'Не вдалося відкрити посилання',
 } as const
 
+const dynamicLegacyRules: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
+  [/^(\d+) generation models configured$/, match => `${match[1]} ${legacyUk['generation models configured']}`],
+  [/^(\d+) embedding models configured$/, match => `${match[1]} ${legacyUk['embedding models configured']}`],
+  [/^Add (.+)$/, match => `Додати ${legacyUk[match[1] as keyof typeof legacyUk] ?? match[1]}`],
+  [/^No (.+) configured$/, match => `${legacyUk[match[1] + ' configured' as keyof typeof legacyUk] ?? `Немає налаштованих: ${match[1]}`}`],
+  [/^Add first (.+)$/, match => `Додати перші ${match[1]}`],
+]
+
+export function translateLegacyUk(enText: string): string | undefined {
+  const direct = legacyUk[enText as keyof typeof legacyUk]
+  if (direct) return direct
+
+  for (const [pattern, translate] of dynamicLegacyRules) {
+    const match = enText.match(pattern)
+    if (match) return translate(match)
+  }
+
+  return undefined
+}
+
 export type LegacyUkKey = keyof typeof legacyUk
