@@ -1,7 +1,7 @@
 import { create, type StateCreator } from 'zustand'
 import { ipc } from '../services/ipc-client'
 import { localize, resolveLocale, translate, type MessageKey, type MessageParams } from '../i18n/core'
-import type { Locale } from '../i18n/types'
+import { SUPPORTED_LOCALES, type Locale } from '../i18n/types'
 import type { GlobalConfig } from '../shared/ipc-channels'
 
 export interface LocaleDependencies {
@@ -37,7 +37,9 @@ export function createLocaleState(dependencies: LocaleDependencies): StateCreato
       await dependencies.saveLocale(locale)
     },
     async toggleLocale() {
-      await get().setLocale(get().locale === 'zh-CN' ? 'en-US' : 'zh-CN')
+      const currentIndex = SUPPORTED_LOCALES.indexOf(get().locale)
+      const nextLocale = SUPPORTED_LOCALES[(currentIndex + 1) % SUPPORTED_LOCALES.length]
+      await get().setLocale(nextLocale)
     },
     t(key, params) {
       return translate(get().locale, key, params)
