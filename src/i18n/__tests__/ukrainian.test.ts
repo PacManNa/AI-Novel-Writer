@@ -18,6 +18,8 @@ describe('Ukrainian localization', () => {
     expect(localize('uk-UA', '项目管理', 'Project management')).toBe('Керування проєктом')
     expect(localize('uk-UA', '新建项目', 'New project')).toBe('Новий проєкт')
     expect(localize('uk-UA', '最近项目', 'Recent projects')).toBe('Нещодавні проєкти')
+    expect(localize('uk-UA', '未配置', '3 generation models configured')).toBe('3 моделей генерації налаштовано')
+    expect(localize('uk-UA', '未配置', 'Add generation models')).toBe('Додати моделі генерації')
     expect(localize('uk-UA', '不存在的中文', 'Unknown text')).toBe('Unknown text')
   })
 })
