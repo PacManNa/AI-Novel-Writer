@@ -123,6 +123,7 @@ export default function TitleBar() {
   }
 
   const zoomLabel = `${Math.round(zoom * 100)}%`
+  const languageShortLabel = locale === 'zh-CN' ? 'EN' : locale === 'en-US' ? 'УК' : '中'
 
   return (
     <div
@@ -231,7 +232,7 @@ export default function TitleBar() {
           style={{ minHeight: 24, padding: '0 7px' }}
         >
           <Languages size={13} strokeWidth={1.5} />
-          <span>{locale === 'zh-CN' ? 'EN' : '中文'}</span>
+          <span>{languageShortLabel}</span>
         </button>
         <button
           onClick={() => openSettings()}
