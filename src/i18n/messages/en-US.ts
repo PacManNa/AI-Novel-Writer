@@ -26,6 +26,7 @@ export const enUS = {
   'common.settings': 'Settings',
   'language.chinese': 'Simplified Chinese',
   'language.english': 'English',
+  'language.ukrainian': 'Ukrainian',
   'language.settingDescription': 'Choose the language used by the interface, system hints, and errors.',
   'language.settingLabel': 'Application language',
   'language.switch': 'Switch interface language',
