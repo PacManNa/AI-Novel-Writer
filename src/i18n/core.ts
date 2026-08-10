@@ -1,6 +1,7 @@
 import { enUS, type MessageKey } from './messages/en-US'
 import { zhCN } from './messages/zh-CN'
 import { ukUA } from './messages/uk-UA'
+import { legacyUk } from './legacy-uk'
 import type { Locale, MessageParams } from './types'
 
 type Catalog = Record<string, string>
@@ -37,7 +38,13 @@ export function localize(
   enUSText: string,
   params?: MessageParams,
 ): string {
-  return interpolate(locale === 'zh-CN' ? zhCNText : enUSText, params)
+  const template = locale === 'zh-CN'
+    ? zhCNText
+    : locale === 'uk-UA'
+      ? legacyUk[enUSText as keyof typeof legacyUk] ?? enUSText
+      : enUSText
+
+  return interpolate(template, params)
 }
 
 export function translate(locale: Locale, key: MessageKey, params?: MessageParams): string {
