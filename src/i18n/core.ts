@@ -1,16 +1,22 @@
 import { enUS, type MessageKey } from './messages/en-US'
 import { zhCN } from './messages/zh-CN'
+import { ukUA } from './messages/uk-UA'
+import { translateLegacyUk } from './legacy-uk'
 import type { Locale, MessageParams } from './types'
 
 type Catalog = Record<string, string>
 
 export const messages: Record<Locale, Catalog> = {
+  'uk-UA': ukUA,
   'en-US': enUS,
   'zh-CN': zhCN,
 }
 
 export function resolveLocale(input?: string | null): Locale {
-  return input?.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en-US'
+  const normalized = input?.toLowerCase() ?? ''
+  if (normalized.startsWith('uk')) return 'uk-UA'
+  if (normalized.startsWith('zh')) return 'zh-CN'
+  return 'en-US'
 }
 
 export function createTranslator(catalogs: Record<Locale, Catalog>) {
@@ -26,17 +32,19 @@ function interpolate(template: string, params: MessageParams = {}): string {
   return template.replace(/\{(\w+)\}/g, (_, name: string) => String(params[name] ?? `{${name}}`))
 }
 
-/**
- * Localize short copy that belongs to a single component. Shared language uses
- * the keyed catalog above; colocating one-off copy keeps the catalog focused.
- */
 export function localize(
   locale: Locale,
   zhCNText: string,
   enUSText: string,
   params?: MessageParams,
 ): string {
-  return interpolate(locale === 'zh-CN' ? zhCNText : enUSText, params)
+  const template = locale === 'zh-CN'
+    ? zhCNText
+    : locale === 'uk-UA'
+      ? translateLegacyUk(enUSText) ?? enUSText
+      : enUSText
+
+  return interpolate(template, params)
 }
 
 export function translate(locale: Locale, key: MessageKey, params?: MessageParams): string {
